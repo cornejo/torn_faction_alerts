@@ -7,8 +7,8 @@
 // @grant       none
 // @run-at      document-start
 // @match       https://www.torn.com/*
-// @updateURL    https://github.com/cornejo/torn_faction_alerts/raw/master/faction_alerts.js
-// @downloadURL  https://github.com/cornejo/torn_faction_alerts/raw/master/faction_alerts.js
+// @updateURL    https://github.com/cornejo/torn_faction_alerts/raw/master/faction_alerts.user.js
+// @downloadURL  https://github.com/cornejo/torn_faction_alerts/raw/master/faction_alerts.user.js
 // ==/UserScript==
 
 console.log("Faction alerts started");
