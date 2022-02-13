@@ -1,5 +1,6 @@
 // ==UserScript==
 // @name        Faction Alerts
+// @author      rDacted
 // @version     0.1
 // @namespace http://tampermonkey.net/
 // @description Place faction alerts on the top of the screen
