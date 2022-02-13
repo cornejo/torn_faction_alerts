@@ -14,7 +14,8 @@
 console.log("Faction alerts started");
 //var CHANNEL = "Faction:9176";
 //var CHANNEL = "Global";
-var CHANNEL = "Users:Regret,rDacted;2544467;2670953";
+//var CHANNEL = "Users:Regret,rDacted;2544467;2670953";
+var CHANNEL = "Users:itogyu,rDacted;2670953;2744349";
 var PREFIX = "!chain ";
 var BG_COLOUR = "red";
 var TEXT_COLOUR = "black";
@@ -77,7 +78,7 @@ function chain_alert_msg(msg)
     }
     else
     {
-        var complete_message = `${message_time}  ${player_name}[${player_id}]: ${message_text}`;
+        var complete_message = `${message_time}${player_name}[${player_id}]: ${message_text}`;
 
         chain_alert_text(complete_message);
 
@@ -104,55 +105,36 @@ WebSocket = function (url, protocols)
     this.protocols = protocols
     if (!this.protocols) { WSObject = new _WS(url) } else { WSObject = new _WS(url, protocols) }
 
-    Object.defineProperty(WSObject,
-                          'onmessage',
-                          {
-        'set': function ()
+    WSObject.addEventListener('message', function(event)
+                              {
+        if(firstUpdateDone == false)
         {
-            var eventThis = this
-            var userFunc = arguments[0]
-            var onMessageHandler = function ()
+            first_update();
+            firstUpdateDone = true;
+        }
+
+        if(event.origin == "wss://ws-chat.torn.com")
+        {
+            var data = JSON.parse(event.data);
+            for (const msg of data.data)
             {
-                if(firstUpdateDone == false)
+                if("roomId" in msg &&
+                   "messageText" in msg &&
+                   msg.roomId == CHANNEL &&
+                   msg.messageText.startsWith(PREFIX))
                 {
-                    first_update();
-                    firstUpdateDone = true;
+                    chain_alert_msg(msg);
                 }
-
-                if(arguments[0].data.includes(PREFIX))
+                else
                 {
-                    console.log(arguments[0].data);
-                }
-
-                if(arguments[0].origin == "wss://ws-chat.torn.com")
-                {
-                    var data = JSON.parse(arguments[0].data);
-                    for (const msg of data.data)
+                    if("roomId" in msg)
                     {
-                        if("roomId" in msg &&
-                           "messageText" in msg &&
-                           msg.roomId == CHANNEL &&
-                           msg.messageText.startsWith(PREFIX))
-                        {
-                            chain_alert_msg(msg);
-                        }
-                        else
-                        {
-                            if("roomId" in msg)
-                            {
-                                console.log(msg.roomId);
-                            }
-                        }
+                        console.log(msg.roomId);
                     }
                 }
-
-                userFunc.apply(eventThis, arguments)
             }
-            WSObject.addEventListener.apply(this, ['message', onMessageHandler, false])
         }
-    }
-                         )
+    });
 
     return WSObject
 }
-
