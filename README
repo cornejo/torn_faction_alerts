@@ -1,0 +1,9 @@
+Provides a way for factions to set sticky messages on top of screens for everyone to be able to know what's going on.
+
+Supports the following commands
+
+!chain <message> - puts the message on the top of the screen
+!chain clear - clears the message
+
+Still in testing phase
+
